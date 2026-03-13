@@ -1,0 +1,72 @@
+#### Stručně ale věcně odpovězte na následující otázky: ######
+
+1. Jaká byla dosažena výkonnost v Intel Advisoru pro implementace ref, line a batch
+(v GFLOPS)? (0.5b)
+==============================================================================
+ref:    1.1 GFLOPS
+line:   29 GFLOPS
+batch:  21.5 GFLOPS hlavní vnitřní smyčka (52.8 GFLOPS vnější smyčka)
+
+(kvůli podmíněnému příkazu if dosahuje funkce nižší GFLOPS než teoretické maximum, 
+ale ve skutečnosti je rychlejší než varianta s vyšším počtem GFLOPS, 
+která netrpí SIMD divergencí, protože používá ternární operátory, 
+viz zakomentovaná funkce v souboru LineMandelCalculator.cc)
+
+
+
+
+2. Porovnejte implementaci referenčního rešení oproti "Line" a "Batch" implementaci. 
+Jakým způsobem jsou načítána data, proč, a jaký to má vliv na výkon. (1b)
+==============================================================================
+Implementace "Line" oproti referenční změnila pořadí smyček a následně aplikovala vektorizaci a redukci.
+Implementace "Batch" navíc rozdělila šířku na více bloků za účelem lepšího využití cache paměti.
+
+
+
+
+
+3. Porovnejte Roofline všech modelů. Jsou implementace memory 
+bound? Jaká je vaše aritmetická intenzita? Dokázali byste ji přibližně spočítat 
+i ručně a jak? (1b)
+==============================================================================
+intenzita:
+  ref 0.167
+  line: 0.4
+  batch: 0.47
+
+
+Všechna řešení jsou spíše memory-bound než compute-bound, 
+protože mnoho hodnot diverguje při malém počtu iterací,
+a proto se ukládají do paměti čísla, 
+nad kterýma bylo provedeno málo výpočetních operací.
+
+Ruční výpočet: počet operací / počet přenesených bajtů z/do operační paměti.
+Řešení line a batch lépe využívají prostorovou lokalitu dat,
+a proto se stejná hodnota nemusí z paměti načítat vícekrát, což zvyšuje využití cache.
+
+
+
+4. Komentujte vliv velikosti cache na výkonnost a chování na větších 
+velikostech domény. (1b)
+==============================================================================
+myslim si ze v mem batch reseni velikost cache nehra velikou roli. 
+v podstate staci velikost L1 o 64B (AVX512), a popripade 128B, jestli by bylo implementováno prednacitani dat.
+vetsi velikosti bloku meli minimalni dopad na vykon.
+
+v line reseni to roli hrat bude, protoze jestli je pocet dat pro sirku vetsi nez cache, tak budou data z cache vypadavat.
+
+Myslím, že v mém batch řešení velikost cache nehraje významnou roli.
+V podstatě stačí velikost L1 cache o 64 B (AVX512)
+a případně 128 B, pokud by bylo implementováno přednačítání dat.
+Větší velikosti bloků měly minimální dopad na výkon.
+v programu je blockSize = 64 (256B)
+
+
+
+
+5. Jaký vliv na výkonnost má symetrie? Lze tento rozdíl pozorovat v Intel Advisor? 
+(nápověda: instrukce) (0.5b)
+============================================================================== 
+Přibližně 2x rychlejší výpočet.
+Aritmetická intenzita se snižuje, protože stačí vypočítat polovinu dat 
+při zachování stejného počtu uložených dat do paměti

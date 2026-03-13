@@ -1,0 +1,204 @@
+Architektury Výpočetních Systémů (AVS 2024)
+Projekt č. 2 (PMC)
+Login: xkucht11
+
+Úloha 1: Paralelizace původního řešení
+===============================================================================
+1) Kterou ze smyček (viz zadání) je vhodnější paralelizovat a co způsobuje 
+   neefektivitu paralelizaci té druhé?
+
+   Vhodnější je paralelizovat smyčku v metodě marchCubes, která zpracovává průchod mřížkou.
+   Tato smyčka je na vyšší úrovni hierarchie volání a iteruje přes jednotlivé buňky mřížky,
+   což poskytuje dostatečně velký a nezávislý prostor pro efektivní paralelizaci.
+   Paralelní rozdělení této smyčky umožňuje rovnoměrnější rozložení zátěže mezi vlákna,
+   čímž se lépe využijí zdroje procesoru.
+
+   Naopak paralelizace smyčky ve funkci evaluateFieldAt by byla méně efektivní.
+   Důvodem je, že tato funkce se zaměřuje na nízkoúrovňové výpočty (např. výpočet minimální vzdálenosti),
+   které jsou obvykle rychlé a mají nízkou granularitu.
+   Paralelizace této smyčky by vedla k vysoké režii spojené s vytvářením a správou vláken,
+   což může převýšit potenciální výhody.
+   Navíc lokalita dat může způsobit častý přístup k paměti, což snižuje efektivitu paralelního zpracování.
+   Tato situace by mohla program dokonce zpomalit, místo aby ho zrychlila.
+
+
+
+2) Jak jste ve funkci LoopMeshBuilder::marchCubes zajistili správný výsledek 
+  (počet trojúhelníků) vrácený touto funkcí? Popište jaké řešení jste zvolili a proč.  
+
+   reduction(+:totalTriangles) protože redukce je optimalizovaná pro paralelní výpočty,
+   a minimalizuje režii synchronizace.
+   Na rozdíl od critical nebo atomic, která blokují přístup k proměnné,
+   umožňuje reduction nezávislý výpočet na jednotlivých vláknech.
+   při dostatečném počtu vláken je rychlost O(log(N)) místo O(N)
+
+
+
+3) Jaké plánování (rozdělení práce mezi vlákna) jste zvolili a proč? Popište, na
+   jakých datech (počet vláken, velikost problému) jste k závěrům došli.  
+
+   Zvolil jsem dynamické plánování, protože doba trvání jednotlivých iterací cyklu není zcela konzistentní.
+   Některé iterace mohou být časově náročnější (např. pokud povrch mřížkou prochází a je nutné provést interpolaci).
+   Dynamické plánování pomáhá rovnoměrně rozložit zátěž mezi vlákna,
+   protože vlákna dostávají nové úkoly, jakmile dokončí ty předchozí.
+   Tento přístup minimalizuje situace, kdy některá vlákna čekají, zatímco jiná ještě pracují.
+
+   Pro velikost chunk jsem zvolil kompromisní hodnotu 16,
+   která poskytuje dobrou rovnováhu mezi režijními náklady na správu úloh a rovnoměrností zatížení.
+   Menší velikost chunk (např. 8) vede k častějšímu přidělování úkolů, což zvyšuje synchronizační režii.
+   Naopak větší hodnoty chunk (32 nebo 64) mohou způsobit nerovnoměrné vytížení vláken,
+   protože některá vlákna dokončí své úkoly dříve a čekají na ostatní.
+
+
+Úloha 2: Paralelní průchod stromem
+===============================================================================
+1) Stručně popište použití OpenMP tasků ve vašem řešení. 
+
+   a) Hlavní paralelní oblast (Vstupní funkce marchCubes):
+      Na začátku se vytvoří paralelní oblast pomocí #pragma omp parallel, která inicializuje vlákna.
+      Direktiva #pragma omp single nowait zajistí,
+      že výpočet začne pouze jedním vláknem, které volá funkci octree_decomposition.
+
+   b) Paralelizace rekurzivního dělení prostoru (Funkce octree_decomposition):
+      Každý podprostor je reprezentován jedním uzlem osmistěnu (octree).
+      Pokud velikost podprostoru dosáhne základního případu (minimální velikost kostky),
+      výpočet je ukončen voláním buildCube.
+
+      Pro každé rozdělení podprostoru na 8 menších podprostorů je použit OpenMP task:
+         #pragma omp task: Vytvoří nový úkol pro volné vlákno,
+            které zpracovává rekurzivní volání na daný podprostor.
+            Vlákna vykonávající jednotlivé tasky pracují nezávisle na sobě.
+
+      Synchronizace všech vytvořených tasků je zajištěna pomocí #pragma omp taskwait,
+      aby bylo dosaženo správného výpočtu.
+
+   c) Akumulace počtu trojúhelníků:
+      Každý task vrací počet trojúhelníků vytvořených v daném podprostoru.
+      Akumulace probíhá pomocí #pragma omp atomic:
+         Zajišťuje atomický součet výsledků z jednotlivých tasků do sdílené proměnné totalTriangles.
+
+
+
+2) Jakou hodnotu cut-off jste zvolili? Jaké hodnoty "cut-off" jste zkoušeli, 
+   na jak velkých velikostech problému a jakých času jste dosáhli? 
+   Odůvodněte vaši volbu.
+
+   Zvolená hodnota:
+      Hodnota cut-off = 1 byla vybrána jako optimální kompromis mezi přesností a výkonem.
+      Zajišťuje, že všechny krychle na nejnižší úrovni budou zpracovány a výsledný povrch bude kompletní.
+
+   Testované hodnoty:
+      Velikost problému:
+         Problém byl testován na mřížce o velikosti 64 na datasetu bun_zipper_res4.pts
+
+   Výsledky:
+      cut-off = 1: Přesné zpracování všech krychlí, výstup obsahoval 42476 trojúhelníků. Doba výpočtu ~100ms
+      cut-off = 2: 5516 trojúhelníků. Povrch nebyl kompletní. Doba výpočtu ~25ms.
+      cut-off = 4: 736 trojúhelníků. Povrch nebyl kompletní. Doba výpočtu ~25ms.
+      trend: 2x vetší cut-off -> 
+         ~4x (příliž odlišné výsledky různych běhů) vetší rychlost paralelní části (při malých počtech trojůhelníků zanedbatelné),
+         ale 8x méně trojůhelníků.
+
+      cut-off = 0.5: chybí jedna strana objektu, výstup obsahoval 168381 trojúhelníků. Doba výpočtu ~200ms
+
+      zajímavost: při cut-off 0.5 a 2 je hezky vidět, že objekt v sobě obsahuje menší verzi sama sebe.
+         to je z pohledu rasterizace zbytečné generování zkrytých trojůhelníků.
+
+3) Jakým způsobem zajišťujete ukládání trojúhelníků z několika vláken současně 
+   v metodě LoopMeshBuilder::emitTriangle?
+
+   Používám direktivu #pragma omp critical.
+   Tato direktiva označuje kódovou sekci, kterou smí současně vykonávat pouze jedno vlákno.
+   Kritická sekce zajistí, že při ukládání trojúhelníku do sdílené datové struktury nebude zapisovat více vláken zároveň.
+   Tím se předchází nekonzistencím.
+
+Úloha 3: Grafy škálování všech řešení
+===============================================================================
+
+1) Stručně zhodnoťte efektivitu vytvořených řešení 
+   (na základě VŠECH odevzdaných grafů ŠKÁLOVÁNÍ).
+
+   a) Efektivita podle silného škálování
+   Silné škálování měří, jak efektivně algoritmus snižuje čas výpočtu při zvyšování počtu vláken na pevné velikosti problému.
+
+      OpenMP Loop:
+         Škáluje téměř ideálně, dokud velikost problému (počet elementů) není příliš malá.
+         Při malých velikostech problému (např. <320 elementů) dojde k bodu,
+         kdy další zvýšení počtu vláken nevede k urychlení.
+         Naopak, režijní náklady na správu vláken způsobí zpomalení.
+         Pro dostatečně velké vstupy (≥320 elementů) s rostoucím počtem vláken čas výpočtu efektivně klesá,
+         téměř v souladu s teoretickými předpoklady.
+
+      Octree:
+         Škálování je méně ideální, zejména při menších velikostech problému (<160 elementů),
+         kde není režie paralelizace vyvážena efektivním rozdělením úloh.
+         Při vyšších velikostech problému (≥160 elementů) Octree vykazuje zlepšení škálování,
+         ale stále zaostává za OpenMP Loop.
+         Ve scénářích s velkým počtem vláken (>16) je patrné,
+         že řízení paralelních vláken představuje větší režii, což ovlivňuje efektivitu.
+
+   b) Efektivita podle slabého škálování
+   Slabé škálování zkoumá, zda při zvětšení velikosti problému a současném zvýšení počtu vláken zůstává výpočetní čas konstantní.
+
+      OpenMP Loop:
+         Výsledky ukazují téměř konstantní čas výpočtu na jádro, zejména pro střední a velké velikosti problému.
+         Výjimečně, pokud je velikost problému na vlákno příliš malá (např. <10 elementů na vlákno)
+         a počet vláken vysoký (např. >16), dochází k nárůstu času výpočtu kvůli režijním nákladům na synchronizaci.
+         Celkově OpenMP Loop škáluje lépe a blíží se ideálnímu slabému škálování.
+
+      Octree:
+         Škálování je výrazně méně efektivní.
+         S rostoucím počtem vláken a velikostí problému stoupá čas výpočtu na jádro.
+         Režie spojená se správou stromové struktury
+         a její rozdělení mezi vlákna brání dosažení konstantní výpočetní doby.
+
+
+
+2) V jakém případě (v závislosti na počtu bodů ve vstupním souboru a velikosti 
+   mřížky) bude vaše řešení 1. úlohy neefektivní? 
+   (pokud takový případ existuje a je vidět ve vašem grafu)
+
+   hodně vláken, a málo vstupních dat.
+
+3) Je (nebo není) stromový algoritmus efektivnější z pohledu slabého škálování 
+   vzhledem ke vstupu?
+
+   Není, hlavně při malých vstupech.
+
+4) Do souboru 3_4.txt napište svůj login, který používáte na Barboře, na druhý
+   řádek napište počet úloh (jobs), které jste spustili za dobu řešení projektu 2
+   a na třetí řádek uveďte, kolik času tyto úlohy běžely (formát HH:MM:SS). 
+   V souboru 3_4.txt využijte předpřipravené kostry - údaje přepište. Můžete využít
+   údajů ze Slurm plánovače, nepočítejte úlohy se suffixem (přepínač -X).
+
+
+Úloha 4: Analýza využití jader pomocí VTune
+================================================================================
+
+1) Jaké bylo průměrné využití jader pro všechny tři implementace s omezením na 
+   18 vláken? Hodnoty zapište do souboru 4_1.txt
+   (využijte předpřipravené kostry v souboru - čísla přepište).
+   
+   ref:
+   loop:
+   tree:
+
+2) Jaké bylo průměrné využití jader pro všechny tři implementace s využitím 
+   všech jader? Hodnoty zapište do souboru 4_2.txt (využijte předpřipravené 
+   kostry v souboru - čísla přepište).
+   
+   ref:
+   loop: 
+   tree:   
+
+3) Vypočítejte efektivitu vašeho řešení loop a tree vůči ref pro 18 a 36 vláken. 
+   Hodnoty naměřte ručně na výpočetním uzlu, ne přes VTune. Použijte následující parametry:
+   
+   ./PMC --builder {ref, tree, loop} -t {18, 36} --grid 128 ../data/bun_zipper_res3.pts 
+   
+   Hodnoty zapište do souboru 4_3.txt 
+   (využijte předpřipravené kostry v souboru - čísla přepište):
+   "loop (18)" vs. "ref"
+   "tree (18)" vs. "ref"
+   "loop (36)" vs. "ref"
+   "tree (36)" vs. "ref"

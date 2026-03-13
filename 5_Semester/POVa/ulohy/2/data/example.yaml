@@ -1,0 +1,8 @@
+path: data
+train: train/images
+val: val/images
+nc: 2
+names:
+  0: mouse
+  1: keyboard
+

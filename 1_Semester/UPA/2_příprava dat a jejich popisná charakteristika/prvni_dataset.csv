@@ -1,0 +1,51 @@
+Age,Course,CGPA,Stress_Level,Depression_Score,Anxiety_Score,Sleep_Quality,Physical_Activity,Diet_Quality,Social_Support,Substance_Use,Counseling_Service_Use,Chronic_Illness,Financial_Stress,Extracurricular_Involvement,Semester_Credit_Load,Residence_Type
+3.0,Others,2.0,3.0,3.0,2.0,Good,Moderate,Good,Moderate,Never,Never,No,2.0,Moderate,1.0,On-Campus
+1.0,Business,3.0,4.0,0.0,3.0,Good,Low,Average,Moderate,Never,Occasionally,No,4.0,High,0.0,On-Campus
+0.0,Business,1.0,3.0,3.0,4.0,Good,Low,Average,High,Never,Never,Yes,0.0,High,2.0,On-Campus
+2.0,Medical,1.0,2.0,4.0,3.0,Good,Moderate,Good,High,Never,Never,No,4.0,Moderate,1.0,Off-Campus
+0.0,Law,3.0,2.0,2.0,4.0,Good,Moderate,Average,Moderate,Never,Never,No,4.0,Moderate,2.0,Off-Campus
+2.0,Business,1.0,0.0,3.0,3.0,Average,Low,Average,Low,Never,Never,No,3.0,Moderate,2.0,On-Campus
+3.0,Medical,4.0,3.0,2.0,1.0,Poor,Low,Average,Moderate,Frequently,Never,No,2.0,Low,4.0,On-Campus
+4.0,Engineering,2.0,3.0,0.0,3.0,Average,Moderate,Average,Moderate,Never,Occasionally,No,0.0,Moderate,2.0,Off-Campus
+2.0,Computer Science,0.0,1.0,1.0,3.0,Average,Moderate,Average,Moderate,Never,Occasionally,No,1.0,High,1.0,On-Campus
+4.0,Medical,1.0,3.0,2.0,2.0,Average,Moderate,Average,High,Never,Occasionally,No,1.0,Moderate,1.0,With Family
+3.0,Medical,0.0,3.0,0.0,3.0,Average,Low,Poor,Moderate,Never,Occasionally,No,2.0,Moderate,1.0,On-Campus
+3.0,Law,3.0,3.0,1.0,4.0,Good,Low,Average,Moderate,Never,Never,No,4.0,Moderate,3.0,Off-Campus
+0.0,Medical,4.0,4.0,1.0,3.0,Good,Low,Average,Moderate,Never,Never,No,1.0,Moderate,2.0,Off-Campus
+1.0,Medical,1.0,4.0,1.0,1.0,Good,Low,Average,High,Never,Never,No,4.0,Moderate,4.0,With Family
+2.0,Computer Science,2.0,3.0,1.0,0.0,Good,Moderate,Average,Moderate,Never,Frequently,No,4.0,High,4.0,Off-Campus
+1.0,Medical,2.0,2.0,2.0,2.0,Good,High,Average,Low,Occasionally,Never,No,3.0,Low,0.0,With Family
+1.0,Business,1.0,4.0,3.0,2.0,Average,Moderate,Average,Low,Never,Never,No,4.0,Low,2.0,On-Campus
+4.0,Computer Science,2.0,1.0,3.0,2.0,Good,High,Good,High,Never,Never,No,4.0,Moderate,1.0,On-Campus
+4.0,Medical,2.0,4.0,4.0,2.0,Average,Moderate,Average,High,Never,Occasionally,No,3.0,High,1.0,Off-Campus
+0.0,Computer Science,3.0,2.0,0.0,4.0,Good,Low,Average,Low,Never,Never,No,2.0,Low,3.0,On-Campus
+4.0,Law,0.0,0.0,0.0,3.0,Average,Moderate,Poor,Low,Never,Never,No,4.0,Low,0.0,Off-Campus
+3.0,Computer Science,2.0,3.0,1.0,3.0,Good,Moderate,Average,Moderate,Never,Never,No,4.0,Low,4.0,Off-Campus
+1.0,Others,0.0,3.0,1.0,2.0,Good,Moderate,Average,Moderate,Never,Never,No,4.0,Moderate,1.0,Off-Campus
+2.0,Engineering,3.0,3.0,2.0,1.0,Average,High,Average,Moderate,Never,Frequently,No,4.0,Low,3.0,On-Campus
+2.0,Engineering,0.0,2.0,1.0,4.0,Good,Low,Average,Moderate,Never,Never,No,3.0,Low,2.0,On-Campus
+4.0,Computer Science,3.0,3.0,1.0,2.0,Good,Moderate,Average,High,Never,Never,No,3.0,Low,2.0,On-Campus
+2.0,Law,1.0,3.0,0.0,4.0,Average,Low,Good,Moderate,Never,Never,No,0.0,Moderate,0.0,With Family
+3.0,Engineering,2.0,2.0,3.0,2.0,Average,Low,Poor,High,Never,Occasionally,No,2.0,Moderate,4.0,With Family
+4.0,Medical,1.0,4.0,1.0,3.0,Good,High,Average,Moderate,Never,Occasionally,No,4.0,Moderate,4.0,With Family
+0.0,Computer Science,1.0,3.0,1.0,1.0,Average,High,Average,Low,Never,Frequently,No,1.0,Low,0.0,With Family
+0.0,Law,0.0,4.0,0.0,4.0,Good,Moderate,Average,High,Never,Occasionally,No,2.0,Low,1.0,Off-Campus
+1.0,Law,0.0,3.0,3.0,4.0,Average,Moderate,Average,Moderate,Never,Never,No,1.0,Low,2.0,With Family
+1.0,Law,3.0,0.0,3.0,3.0,Average,Moderate,Average,Moderate,Never,Occasionally,No,0.0,Low,1.0,Off-Campus
+3.0,Engineering,3.0,2.0,4.0,1.0,Good,Moderate,Average,Low,Never,Never,No,0.0,Moderate,1.0,With Family
+2.0,Computer Science,1.0,4.0,4.0,3.0,Good,Moderate,Average,Moderate,Never,Never,No,4.0,Low,2.0,With Family
+1.0,Law,0.0,4.0,3.0,3.0,Good,High,Average,High,Occasionally,Occasionally,No,2.0,High,4.0,Off-Campus
+4.0,Medical,4.0,3.0,3.0,0.0,Good,Moderate,Good,Moderate,Never,Never,No,1.0,Moderate,3.0,With Family
+1.0,Law,4.0,4.0,0.0,1.0,Good,Low,Poor,Moderate,Occasionally,Never,No,3.0,Low,4.0,With Family
+2.0,Medical,3.0,2.0,1.0,4.0,Good,Moderate,Average,Moderate,Never,Never,No,2.0,Low,1.0,With Family
+3.0,Medical,3.0,4.0,4.0,1.0,Average,Moderate,Good,High,Never,Never,No,2.0,Low,1.0,Off-Campus
+2.0,Law,0.0,2.0,0.0,4.0,Good,Low,Poor,Low,Never,Occasionally,No,0.0,Low,3.0,With Family
+4.0,Engineering,0.0,3.0,1.0,1.0,Good,Low,Average,Moderate,Never,Never,No,2.0,Moderate,3.0,With Family
+0.0,Law,3.0,4.0,0.0,0.0,Good,Moderate,Average,High,Never,Never,No,0.0,Moderate,1.0,On-Campus
+4.0,Engineering,0.0,1.0,2.0,2.0,Good,Moderate,Poor,Moderate,Never,Never,No,3.0,High,3.0,Off-Campus
+3.0,Medical,2.0,0.0,0.0,0.0,Good,Moderate,Average,High,Never,Occasionally,Yes,4.0,Low,2.0,Off-Campus
+1.0,Medical,0.0,4.0,1.0,0.0,Average,Moderate,Poor,Moderate,Never,Occasionally,No,0.0,Moderate,2.0,On-Campus
+1.0,Computer Science,4.0,2.0,4.0,0.0,Average,Low,Average,High,Frequently,Never,No,4.0,Moderate,2.0,On-Campus
+1.0,Medical,0.0,4.0,4.0,1.0,Average,Moderate,Good,High,Never,Never,No,4.0,Low,4.0,On-Campus
+3.0,Business,3.0,0.0,1.0,2.0,Average,Low,Average,Low,Never,Never,No,4.0,High,4.0,On-Campus
+2.0,Computer Science,3.0,0.0,4.0,2.0,Average,Moderate,Good,Moderate,Never,Never,No,0.0,Low,3.0,Off-Campus

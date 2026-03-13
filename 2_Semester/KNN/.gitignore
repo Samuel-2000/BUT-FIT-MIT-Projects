@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# saved states
+*.pt
+results
+model_states
+
+# generated images
+imgs
+
+# downloaded datasets
+data
+
+# log
+vis_net.log
+
+#
+.idea/
+.DS_Store
+
+# Translations
+*.mo
+*.pot
+
+# Sphinx documentation
+docs/build/
+
+# pyenv
+.python-version
+
+# Environments
+venv/
+
+
+datasets/
+models/
