@@ -71,15 +71,11 @@ This document lists projects, scores and instructor comments for courses across 
 | TIN – Theoretical Computer Science                 |         1 | (no title)                                                  | 5.7 / 7 | zadani nerika nic o a^2 ani epsilon: 9b; deltaA(p, a) je mnozina; „deterministicke uhadnuti“? to je oxymoron? 14b; hlavni myslenka …                                                                                                                                                            |
 |                                                    |         2 | (no title)                                                  | 7.5 / 8 |                                                                                                                                                                                                                                                                                                 |
 | VIN – Computer Art                                 |         x | zbierka obrazkov, ktore sa mi pacili.                       |     max |                                                                                                                                                                                                                                                                                                 |
-
 ---
 
 # Semester 6
 
-| Course                       | Project # | Project name | Points | Comments |
-| ---------------------------- | --------: | ------------ | -----: | -------- |
-| VGE – Computational Geometry |         1 | (no entry)   |        |          |
-| ZPO – Image Processing       |         1 | (no entry)   |        |          |
-
----
-
+| Course                       | Project # | Project name                                 |  Points | Comments |
+| ---------------------------- | --------: | -------------------------------------------- | ------: | -------- |
+| VGE – Computational Geometry |         1 | Akcelerační datové struktury pro ray-tracing | 31 / 31 | Prezentace pěkná, projekt funkční, dokumentace splněna, podpora interaktivní editace scén, denoiserů a optimalizací. |
+| ZPO – Image Processing       |         1 | Rotace obrazu                                | 26 / 29 | Autor v rámci projektu úspěšně realizoval různé interpolační metody pro úlohu rotace obrazu, přičemž prokázal schopnost tyto metody vhodně a objektivně vyhodnotit s využitím relevantních metrik. Projekt je zpracován velmi pečlivě a svou odbornou kvalitou i celkovým rozsahem představuje mírně nadprůměrnou práci. Velmi oceňuji také propracované GUI pro demonstraci a srovnání metod. Doporučení: doplnit detailnější komentáře do zdrojových kódů. Celkově velmi zdařilé a funkční řešení. 
